@@ -19,6 +19,14 @@ energy: .word 100
 strength: .word 100
 speed: .word 100
 
+healthString: .string "Health is %d"
+foodString: .string "Food is %d"
+waterString: .string "Water is %d"
+shelterString: .string "Shelter is %d"
+energyString: .string "Energy is %d"
+strengthString: .string "Strength is %d"
+speedString: .string "Speed is %d"
+
 
 .text
 .global getHealth
@@ -35,12 +43,21 @@ speed: .word 100
 .global setStrength
 .global getSpeed
 .global setSpeed
+
+.global printHealth
+.global printFood
+.global printWater
+.global printShelter
+.global printEnergy
+.global printStrength
+.global printSpeed
 // getters and setters for global variables
 
 getHealth:
 ldr x1,=health
 ldr w0,[x1]
 ret
+
 setHealth:
 ldr x1, =health
 str w0,[x1]
@@ -50,6 +67,7 @@ getFood:
 ldr x1,=food
 ldr w0,[x1]
 ret
+
 setFood:
 ldr x1, =food
 str w0,[x1]
@@ -59,6 +77,7 @@ getWater:
 ldr x1,=water
 ldr w0,[x1]
 ret
+
 setWater:
 ldr x1, =water
 str w0,[x1]
@@ -68,6 +87,7 @@ getShelter:
 ldr x1,=shelter
 ldr w0,[x1]
 ret
+
 setShelter:
 ldr x1, =shelter
 str w0,[x1]
@@ -77,6 +97,7 @@ getEnergy:
 ldr x1,=energy
 ldr w0,[x1]
 ret
+
 setEnergy:
 ldr x1, =energy
 str w0,[x1]
@@ -86,6 +107,7 @@ getStrength:
 ldr x1,=strength
 ldr w0,[x1]
 ret
+
 setStrength:
 ldr x1, =strength
 str w0,[x1]
@@ -95,7 +117,66 @@ getSpeed:
 ldr x1,=speed
 ldr w0,[x1]
 ret
+
 setSpeed:
 ldr x1, =speed
 str w0,[x1]
+ret
+
+// print the variables
+
+printHealth:
+bl getHealth
+mov w1,w0
+ldr x0,=healthString
+bl printf
+mov w0,0
+ret
+
+printFood:
+bl getFood
+mov w1,w0
+ldr x0,=foodString
+bl printf
+mov w0,0
+ret
+
+printWater:
+bl getWater
+mov w1,w0
+ldr x0,=waterString
+bl printf
+mov w0,0
+ret
+
+printShelter:
+bl getShelter
+mov w1,w0
+ldr x0,=shelterString
+bl printf
+mov w0,0
+ret
+
+printEnergy:
+bl getEnergy
+mov w1,w0
+ldr x0,=energyString
+bl printf
+mov w0,0
+ret
+
+printStrength:
+bl getStrength
+mov w1,w0
+ldr x0,=strengthString
+bl printf
+mov w0,0
+ret
+
+printSpeed:
+bl getSpeed
+mov w1,w0
+ldr x0,=speedString
+bl printf
+mov w0,0
 ret
