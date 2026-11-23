@@ -19,7 +19,7 @@ inv:    .zero index*4
         .global add_inventory
         .global take_inventory
 
-//TODO: improve print statement!!! (try stack arguments instead)
+//TODO: improve print statement!!! (try stack arguments instead?)
 view_inventory:
         stp     x29, x30, [sp, -16]!            //stp because of bl printf
         ldr     x14, =inv 
