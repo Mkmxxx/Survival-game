@@ -4,10 +4,10 @@
 
 define(fp, x29) 
 define(lr, x30)
-define(index, 5) 
+.equ    index, 6 
 
         .data 
-output: .string "\nCooked Meat:%d\nRaw Meat:%d\nBerries:%d\nWood:%d\nHide:%d\n"     //string to improve 
+output: .string "\nCooked Meat:%d\nRaw Meat:%d\nBerries:%d\nWood:%d\nHide:%d\nWater:%d\n"     //string to improve 
 
         .bss 
         .balign 4 
@@ -29,6 +29,7 @@ view_inventory:
         ldr     w3, [x14, 8] 
         ldr     w4, [x14, 12] 
         ldr     w5, [x14, 16]
+        ldr     w6, [x14, 20]
         bl      printf 
         ldp     x29, x30, [sp], 16
         mov     x0, 0
@@ -63,7 +64,7 @@ take_inventory:
         ldr     x10, =inv 
         add     x10, x10, x9 
         ldr     w11, [x10] 
-        cmp     w11, x1                         //if inv[index] < num, return -1 (not enough material)
+        cmp     w11, w1                         //if inv[index] < num, return -1 (not enough material)
         b.lt    bad_input 
         sub     w11, w11, w1                    //inv[index] = inv[index] - num
         str     w11, [x10] 

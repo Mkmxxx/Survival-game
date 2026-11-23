@@ -1,3 +1,12 @@
+//inventory indices
+.equ    cooked_meat, 0
+.equ    raw_meat, 1
+.equ    berries, 2
+.equ    wood, 3
+.equ    hide, 4
+.equ    water, 5
+
+
 // action for hunting
 .global hunt
 hunt:
@@ -15,7 +24,7 @@ hunt:
     bl setEnergy
 
     // gain 3 meat
-    mov w0, 0
+    mov w0, raw_meat
     mov w1, 2
     bl add_inventory
 
@@ -40,7 +49,7 @@ hunt_health_checked:
     bl setHealth
 
     // gain 1 meat
-    mov w0, 0
+    mov w0, raw_meat
     mov w1, 1
     bl add_inventory
     mov w0, 0
@@ -90,15 +99,15 @@ gatherWater_end:
 eat:
     stp x19, x30, [sp, -16]!
 
-    // eat 1 meat
-    mov w0, 0
+    // eat 1 cooked meat
+    mov w0, cooked_meat
     mov w1, 1
     bl take_inventory
     cmp w0, 0
     b.eq eat_has_food
 
     // if no meat in inventory, eat 1 berry
-    mov w0, 1
+    mov w0, berries
     mov w1, 1
     bl take_inventory
     cmp w0, 0
@@ -132,7 +141,7 @@ drinkWater:
     stp x19, x30, [sp, -16]!
 
     // take 1 water
-    mov w0, 4
+    mov w0, water
     mov w1, 1
     bl take_inventory
 
@@ -180,12 +189,12 @@ explore:
     bl setEnergy
 
     // collect 2 wood
-    mov w0, 2
+    mov w0, wood
     mov w1, 2
     bl add_inventory
 
     // collect 2 berries
-    mov w0, 1
+    mov w0, berries
     mov w1, 2
     bl add_inventory
 
@@ -212,7 +221,7 @@ buildShelter:
     b.lt build_no_resources
 
     // take 10 wood
-    mov w0, 2
+    mov w0, wood
     mov w1, 10
     bl take_inventory
     cmp w0, 0
