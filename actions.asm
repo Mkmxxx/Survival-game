@@ -33,9 +33,10 @@ hunt_low_energy:
     cmp w0, 0
     b.ge hunt_health_checked
     mov w0, 0
+    // error here, if health is 0 should likely end the game
 
 // gain 1 meat if remaining health is greater than 0
-hunt_health_checked
+hunt_health_checked:
     bl setHealth
 
     // gain 1 meat
@@ -68,6 +69,7 @@ gatherWater:
     cmp w0, 100
     b.le gatherWater_limit_checked
     mov w0, 100
+    b gatherWater_limit_checked
 
 gatherWater_limit_checked:
     bl setWater
@@ -77,6 +79,7 @@ gatherWater_limit_checked:
 
 gatherWater_low_energy:
     mov w0, -1
+    \\ error here, this does nothing
 
 gatherWater_end:
     ldp x19, x30, [sp], 16
@@ -107,6 +110,7 @@ eat_has_food:
     cmp w0, 100
     b.le eat_health_checked
     mov w0, 100
+    b eat_health_checked
 
 eat_health_checked:
     bl setHealth
@@ -116,6 +120,7 @@ eat_health_checked:
 
 eat_no_food:
     mov w0, -1
+    // error, does nothing
 
 eat_end:
     ldp x19, x30, [sp], 16
@@ -141,6 +146,7 @@ drinkWater:
     cmp w0, 100
     b.le drink_health_checked
     mov w0, 100
+    b drink_health_checked
 
 drink_health_checked:
     bl setHealth
@@ -150,6 +156,7 @@ drink_health_checked:
 
 drink_no_water:
     mov w0, -1
+    // error, does nothing
 
 drink_end:
     ldp x19, x30, [sp], 16
@@ -187,6 +194,7 @@ explore:
 
 explore_low_energy:
     mov w0, -1
+    // error, does nothing
 
 explore_end:
     ldp x19, x30, [sp], 16
@@ -220,6 +228,7 @@ buildShelter:
     cmp w0, 100
     b.le build_shelter_limit_checked
     mov w0, 100
+    b build_shelter_limit_checked
 
 build_shelter_limit_checked:
     bl setShelter
@@ -229,7 +238,43 @@ build_shelter_limit_checked:
 
 build_no_resources:
     mov w0, -1
+    // error, does nothing
 
 build_end:
     ldp x19, x30, [sp], 16
+    ret
+
+.global sleep
+sleep:
+    stp x19, x30, [sp, -16]!
+
+    bl getEnergy
+    mov w19, w0
+    add w19,w19,20
+    cmp w19, 100
+    b.le sleep_checked
+    mov w0, 100
+    b sleep_energy
+
+sleep_energy:
+    bl setEnergy
+
+    bl getFood
+    mov w19,w0
+    sub w19,w19,10
+    cmp w19,0
+    b.le die
+    bl setFood
+
+    bl getWater
+    mov w19,w0
+    sub w19,w19,10
+    cmp w19,0
+    b.le die
+    bl setWater
+    b sleep_end
+
+sleep_end:
+    ldp x19, x30, [sp], 16
+    mov w0,0
     ret
