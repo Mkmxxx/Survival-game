@@ -17,7 +17,7 @@ hunt:
     // gain 3 meat
     mov w0, 0
     mov w1, 2
-    bl adding
+    bl add_inventory
 
     mov w0, 0
     b hunt_end
@@ -42,7 +42,7 @@ hunt_health_checked:
     // gain 1 meat
     mov w0, 0
     mov w1, 1
-    bl adding
+    bl add_inventory
     mov w0, 0
 
 hunt_end:
@@ -93,14 +93,14 @@ eat:
     // eat 1 meat
     mov w0, 0
     mov w1, 1
-    bl taking
+    bl take_inventory
     cmp w0, 0
     b.eq eat_has_food
 
     // if no meat in inventory, eat 1 berry
     mov w0, 1
     mov w1, 1
-    bl taking
+    bl take_inventory
     cmp w0, 0
     b.lt eat_no_food
 
@@ -134,7 +134,7 @@ drinkWater:
     // take 1 water
     mov w0, 4
     mov w1, 1
-    bl taking
+    bl take_inventory
 
     cmp w0, 0
     b.lt drink_no_water
@@ -182,12 +182,12 @@ explore:
     // collect 2 wood
     mov w0, 2
     mov w1, 2
-    bl adding
+    bl add_inventory
 
     // collect 2 berries
     mov w0, 1
     mov w1, 2
-    bl adding
+    bl add_inventory
 
     mov w0, 0
     b explore_end
@@ -214,7 +214,7 @@ buildShelter:
     // take 10 wood
     mov w0, 2
     mov w1, 10
-    bl taking
+    bl take_inventory
     cmp w0, 0
     b.lt build_no_resources
 
