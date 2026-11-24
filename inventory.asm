@@ -4,10 +4,10 @@
 
 define(fp, x29) 
 define(lr, x30)
-.equ    index, 6 
+.equ    index, 5
 
         .data 
-output: .string "\nCooked Meat:%d\nRaw Meat:%d\nBerries:%d\nWood:%d\nHide:%d\nWater:%d\n"     //string to improve 
+output: .string "\nCooked Meat:%d\nRaw Meat:%d\nBerries:%d\nWood:%d\nWater:%d\n"     //string to improve 
 
         .bss 
         .balign 4 
@@ -29,7 +29,6 @@ view_inventory:
         ldr     w3, [x14, 8] 
         ldr     w4, [x14, 12] 
         ldr     w5, [x14, 16]
-        ldr     w6, [x14, 20]
         bl      printf 
         ldp     x29, x30, [sp], 16
         mov     x0, 0
