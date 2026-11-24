@@ -278,3 +278,5 @@ sleep_end:
     ldp x19, x30, [sp], 16
     mov w0,0
     ret
+
+.global cook
