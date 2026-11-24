@@ -3,8 +3,7 @@
 .equ    raw_meat, 1
 .equ    berries, 2
 .equ    wood, 3
-.equ    hide, 4
-.equ    water, 5
+.equ    water, 4
 
 
 // action for hunting
