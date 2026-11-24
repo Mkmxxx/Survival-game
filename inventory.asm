@@ -73,3 +73,4 @@ take_inventory:
 bad_input: 
         mov     w0, -1
         ret 
+        
