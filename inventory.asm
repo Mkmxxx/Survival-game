@@ -1,65 +1,76 @@
  //inventory system functions 
+ //IF UPDATING, EDIT INDEX(LINE 6) AND OUTPUT(LINE 9)
+ //ALSO UPDATE VIEW_INVENTORY FOR NOW
 
 define(fp, x29) 
-define(lr, x30) 
+define(lr, x30)
+.equ    index, 6 
 
         .data 
-output: .string "\n Meat:%d\n Berries:%d\n Wood:%d\n Hide:%d\n"     //string to improve 
+output: .string "\nCooked Meat:%d\nRaw Meat:%d\nBerries:%d\nWood:%d\nHide:%d\nWater:%d\n"     //string to improve 
 
         .bss 
         .balign 4 
-inv:    .zero 16        //add more indices when we figure out how many items
+inv:    .zero index*4
 
         .text 
         .balign 4 
+        .global view_inventory
+        .global add_inventory
+        .global take_inventory
 
-//improve when more indices are added
-
-view:
-        stp     x29, x30, [sp, -16]!
+//TODO: improve print statement!!! (try stack arguments instead?)
+view_inventory:
+        stp     x29, x30, [sp, -16]!            //stp because of bl printf
         ldr     x14, =inv 
         ldr     x0, =output 
-        ldr     x1, [x14] 
-        ldr     x2, [x14, 4] 
-        ldr     x3, [x14, 8] 
-        ldr     x4, [x14, 12] 
+        ldr     w1, [x14] 
+        ldr     w2, [x14, 4] 
+        ldr     w3, [x14, 8] 
+        ldr     w4, [x14, 12] 
+        ldr     w5, [x14, 16]
+        ldr     w6, [x14, 20]
         bl      printf 
         ldp     x29, x30, [sp], 16
         mov     x0, 0
         ret
 
-adding: 
-        cmp     x0, 0 
+//add_inventory(index, num) adds num to inv[index]
+add_inventory: 
+        cmp     w0, 0                           //if index < 0 or index >= len(inv), return -1
         b.lt    bad_input 
-        cmp     x0, 4 
+        cmp     w0, index
         b.ge    bad_input 
-        lsl     x9, x0, 2 
+        lsl     w9, w0, 2                       //index = index * 4 for address calculating
+        uxtw    x9, w9
         ldr     x10, =inv 
         add     x10, x10, x9 
-        ldr     x11, [x10] 
-        cmp     x11, 0 
+        ldr     w11, [x10] 
+        cmp     w11, 0                          //if inv[index] < 0, go bad_input
         b.lt    bad_input 
-        add     x11, x11, x1 
-        str     x11, [x10] 
-        mov     x0, 0 
+        add     w11, w11, w1                    //inv[index] = inv[index] + num
+        str     w11, [x10] 
+        mov     w0, 0 
         ret 
 
-taking: 
-        cmp     x0, 0 
+//take_inventory(index, num) takes num from inv[index]
+take_inventory: 
+        cmp     w0, 0                           //if index < 0 or index >= len(inv), return -1
         b.lt    bad_input 
-        cmp     x0, 4 
+        cmp     w0, index
         b.ge    bad_input 
-        lsl     x9, x0, 2 
+        lsl     w9, w0, 2                       //index = index * 4 for address calculating
+        uxtw    x9, w9
         ldr     x10, =inv 
         add     x10, x10, x9 
-        ldr     x11, [x10] 
-        cmp     x11, x1 
+        ldr     w11, [x10] 
+        cmp     w11, w1                         //if inv[index] < num, return -1 (not enough material)
         b.lt    bad_input 
-        sub     x11, x11, x1 
-        str     x11, [x10] 
-        mov     x0, 0 
+        sub     w11, w11, w1                    //inv[index] = inv[index] - num
+        str     w11, [x10] 
+        mov     w0, 0 
         ret 
 
 bad_input: 
-        mov     x0, -1
+        mov     w0, -1
         ret 
