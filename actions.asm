@@ -289,3 +289,20 @@ sleep_end:
     ret
 
 .global cook
+cook:
+    mov w0, raw_meat
+    mov w1, 1
+    bl take_inventory
+    
+    cmp w0,0
+    b.lt no_raw_meat
+    mov w0, cooked_meat
+    mov w1,1
+    bl add_inventory
+
+    mov w0,0
+    ret
+    
+no_raw_meat:
+    mov w0,-1
+    ret
