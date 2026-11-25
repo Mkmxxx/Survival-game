@@ -143,6 +143,7 @@ game_over:
 //  init_game: set starting values
 // ============================================================================
 init_game:
+        stp     x29, x30, [sp, #-16]!
         mov     w0, #1
         str     w0, [x19, #P_DAY]
         mov     w0, #100
@@ -157,9 +158,9 @@ init_game:
         mov     w0, #5
         str     w0, [x19, #P_STRENGTH]
         str     w0, [x19, #P_SPEED]
-        mov     w0, berries
+        mov     w0, berries             //add 3 berries, 3 water, 2 wood to inventory at start
         mov     w1, #3
-        bl      add_inventory                   //add 3 berries, 3 water, 2 wood to inventory at start
+        bl      add_inventory
         mov     w0, water
         mov     w1, #3
         bl      add_inventory
@@ -172,6 +173,7 @@ init_game:
         cbnz    w0, 1f                // xorshift must never have a 0 seed
         mov     w0, #1
 1:      str     w0, [x19, #P_SEED]
+        ldp     x29, x30, [sp], #16
         ret
 
 // ============================================================================
