@@ -61,13 +61,16 @@
         .equ P_WEATHER,  32
         .equ P_STATE,    36
         .equ P_SEED,     40           // RNG state
-        .equ P_FOOD,     44           // inventory (RJ owns these)
-        .equ P_WATER,    48
-        .equ P_WOOD,     52
-        .equ P_SIZE,     56
+        .equ P_SIZE,     44
 
         .equ STAT_COUNT, 5            // rows in stat_table
 
+// ---- Inventory Constants --------------------------------------------------
+        .equ    cooked_meat, 0
+        .equ    raw_meat, 1
+        .equ    berries, 2
+        .equ    wood, 3
+        .equ    water, 4
 // ============================================================================
         .text
 
@@ -154,11 +157,15 @@ init_game:
         mov     w0, #5
         str     w0, [x19, #P_STRENGTH]
         str     w0, [x19, #P_SPEED]
-        mov     w0, #3
-        str     w0, [x19, #P_FOOD]
-        str     w0, [x19, #P_WATER]
-        mov     w0, #2
-        str     w0, [x19, #P_WOOD]
+        mov     w0, berries
+        mov     w1, #3
+        bl      add_inventory                   //add 3 berries, 3 water, 2 wood to inventory at start
+        mov     w0, water
+        mov     w1, #3
+        bl      add_inventory
+        mov     w0, wood
+        mov     w1, #2
+        bl      add_inventory
 
         mrs     x0, cntvct_el0        // hardware counter = unpredictable seed
         eor     w0, w0, w0, lsr #16
