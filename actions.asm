@@ -271,14 +271,14 @@ sleep_energy:
     mov w19,w0
     sub w19,w19,10
     cmp w19,0
-    b.le die
+    b.le die // not die but decrease health 
     bl setFood
 
     bl getWater
     mov w19,w0
     sub w19,w19,10
     cmp w19,0
-    b.le die
+    b.le die // not die but decrease health
     bl setWater
     b sleep_end
 
@@ -301,7 +301,7 @@ cook:
 
     mov w0,0
     ret
-    
+
 no_raw_meat:
     mov w0,-1
     ret
